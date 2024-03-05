@@ -2,6 +2,7 @@ version: '3.0'
 
 services:
   searcher:
+    container_name: "searcher_container"
     build: ./searcher
     restart: on-failure
     depends_on:
@@ -14,6 +15,19 @@ services:
       - analyzer:/resource/analyzer
       - search:/resource/search
     command: python3 main.py
+  
+  generator:
+    container_name: generator_container
+    build: ./generator
+    depends_on:
+      - searcher
+    volumes:
+      - ~/.ssh:/root/.ssh
+      - ~/.bash_history:/root/.bash_history
+      - ./generator:/app
+      - search:/resource/search
+    command: python3 loader.py
+    
 
   rabbit:
     image: rabbitmq:3.13.0-management
