@@ -25,11 +25,12 @@ class FileSeeker(FileSystemEventHandler):
         file_type = mime.from_file(file_name)
 
         if file_type.startswith('text/'):
+            # print("Parsing", file_name, magic.from_file(file_name))
             new_path = self.move_file(file_name=file_name, directory=self.text_file_folder)
             message = json.dumps({"path": new_path})
             self.rabbit.send_message(message, "Parsing")
         else:
-            print(file_name, magic.from_file(file_name))
+            # print("Errors",file_name, magic.from_file(file_name))
             new_path = self.move_file(file_name=file_name, directory=self.errors_folder)
             message = json.dumps({"path": new_path})
             self.rabbit.send_message(message, "Errors")

@@ -27,8 +27,21 @@ services:
       - ./generator:/app
       - search:/resource/search
     command: python3 loader.py
-    
 
+  analyzer:
+    container_name: "analyzer_container"
+    build: ./analyzer
+    restart: on-failure
+    depends_on:
+      - searcher
+      - mysql_database
+    volumes:
+      - ~/.ssh:/root/.ssh
+      - ~/.bash_history:/root/.bash_history
+      - ./analyzer:/app
+      - analyzer:/resource/analyzer
+    command: python3 main.py
+    
   rabbit:
     image: rabbitmq:3.13.0-management
     ports:
@@ -40,10 +53,22 @@ services:
       timeout: 30s
       retries: 5
       start_period: 30s
+
+  mysql_database:
+    image: mysql:8.3.0
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=My7Pass@Word_9_8A_zE
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
 volumes:
   search:
   errors:
   analyzer:
+  mysql_data:
 
 
 

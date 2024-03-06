@@ -5,10 +5,10 @@ from bs4 import BeautifulSoup
 
 
 visited_urls = set()
-start_url = "https://fly-z-one.ru/"
+start_url = "https://proproprogs.ru/"
 
 
-def download_page(url: str):
+def download_page(url: str) -> None:
     if url in visited_urls:
         return
     visited_urls.add(url)
@@ -16,10 +16,11 @@ def download_page(url: str):
     try:
         response = requests.get(url)
         if response.status_code != 200:
-            return
-        
+            response.raise_for_status()
+  
         content = response.text
         soup = BeautifulSoup(content, 'html.parser')
+        
 
         for link in soup.find_all('a'):
             next_link = link.get('href')

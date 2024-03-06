@@ -2,6 +2,7 @@
 
 #enviroments
 .env
+resource/
 env.py
 # Editors
 .vscode/
