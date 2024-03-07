@@ -41,6 +41,20 @@ services:
       - ./analyzer:/app
       - analyzer:/resource/analyzer
     command: python3 main.py
+
+  errors:
+    container_name: "errors_container"
+    build: ./erroneous
+    restart: on-failure
+    depends_on:
+      - rabbit
+      - searcher
+    volumes:
+      - ~/.ssh:/root/.ssh
+      - ~/.bash_history:/root/.bash_history
+      - ./erroneous:/app
+      - errors:/resource/errors
+    command: python3 main.py
     
   rabbit:
     image: rabbitmq:3.13.0-management

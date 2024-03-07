@@ -3,14 +3,16 @@ import requests
 import os
 from bs4 import BeautifulSoup
 
-
+start_url = "https://fly-z-one.ru/"
+urls_to_visit = [start_url]
 visited_urls = set()
-start_url = "https://proproprogs.ru/"
 
-
-def download_page(url: str) -> None:
+while urls_to_visit:
+    url = urls_to_visit.pop(0)
+    
     if url in visited_urls:
-        return
+        continue
+        
     visited_urls.add(url)
     
     try:
@@ -20,20 +22,16 @@ def download_page(url: str) -> None:
   
         content = response.text
         soup = BeautifulSoup(content, 'html.parser')
-        
 
         for link in soup.find_all('a'):
             next_link = link.get('href')
             if next_link:
                 next_link = urljoin(url, next_link)
                 if urlparse(next_link).netloc == urlparse(url).netloc:
-                        download_page(next_link)
+                    urls_to_visit.append(next_link)
                 
         file_path = os.path.join("../resource/search", f"{url.replace('/', '_').replace(':', '')}")
         with open(file_path, "w") as file:
             file.write(content)
     except Exception as e:
         print(f"Error downloading {url}: {str(e)}")
-        
-
-download_page(start_url)
