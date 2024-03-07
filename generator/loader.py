@@ -1,9 +1,15 @@
 from urllib.parse import urljoin, urlparse
 import requests
 import os
+import json
 from bs4 import BeautifulSoup
 
-start_url = "https://fly-z-one.ru/"
+
+with open('config.json', 'r') as file:
+    config_data = json.load(file)
+
+
+start_url = config_data["start_url"]
 urls_to_visit = [start_url]
 visited_urls = set()
 

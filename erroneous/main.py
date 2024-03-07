@@ -5,17 +5,20 @@ from email_sendler import EmailNotificationService
 from telegram_sendler import TelegramNotificationService
 
 
+with open('config.json', 'r') as file:
+    config_data = json.load(file)
+    
 
-token = "6318131538:AAFVgE9nHLvQMMYMJWWRKcOzJ3PaPcPEIcw"
-chanel = "-1001908502023"
-password = "hjfk voxh yfck bwlw"
-email_sender = "k1st.volkov@gmail.com"
-smtp_server = "smtp.gmail.com"
-email_port = 587
-recipient = ["k1st.volkov@gmail.com"]
+token = config_data["token"]
+channel = config_data["channel"]
+password = config_data["password"]
+email_sender = config_data["email_sender"]
+smtp_server = config_data["smtp_server"]
+email_port = config_data["email_port"]
+recipient = config_data["recipient"]
 
 config_email = [email_sender, password, smtp_server, email_port, recipient]
-config_telegram = [token, chanel]
+config_telegram = [token, channel]
 
 
 class NotificationService(EmailNotificationService, TelegramNotificationService):

@@ -11,6 +11,7 @@ services:
       - ~/.ssh:/root/.ssh
       - ~/.bash_history:/root/.bash_history
       - ./searcher:/app
+      - ./searcher/config.json:/app/config.json
       - errors:/resource/errors
       - analyzer:/resource/analyzer
       - search:/resource/search
@@ -25,6 +26,7 @@ services:
       - ~/.ssh:/root/.ssh
       - ~/.bash_history:/root/.bash_history
       - ./generator:/app
+      - ./generator/config.json:/app/config.json
       - search:/resource/search
     command: python3 loader.py
 
@@ -39,6 +41,7 @@ services:
       - ~/.ssh:/root/.ssh
       - ~/.bash_history:/root/.bash_history
       - ./analyzer:/app
+      - ./analyzer/config.json:/app/config.json
       - analyzer:/resource/analyzer
     command: python3 main.py
 
@@ -53,7 +56,22 @@ services:
       - ~/.ssh:/root/.ssh
       - ~/.bash_history:/root/.bash_history
       - ./erroneous:/app
+      - ./erroneous/config.json:/app/config.json
       - errors:/resource/errors
+    command: python3 main.py
+
+  reader_sage:
+    container_name: "reader_sage_container"
+    build: ./reader_sage
+    restart: on-failure
+    depends_on:
+      - generator
+      - searcher
+      - mysql_database
+    volumes:
+      - ~/.ssh:/root/.ssh
+      - ~/.bash_history:/root/.bash_history
+      - ./reader_sage:/app
     command: python3 main.py
     
   rabbit:

@@ -5,7 +5,7 @@ class RabbitManager:
     def __init__(
         self,
         host: str = "rabbit",
-        port: int =5672,
+        port: int = 5672,
         login: str = "guest",
         password: str = "guest"
         ):
